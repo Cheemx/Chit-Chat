@@ -87,6 +87,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 	if e != nil {
 		http.Error(w, "Error in extracting request body", http.StatusBadRequest)
+		fmt.Println("Error in extracting request body")
 		return
 	}
 
@@ -97,6 +98,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 	if err != mongo.ErrNoDocuments {
 		http.Error(w, "The User already exists", http.StatusBadRequest)
+		fmt.Println("The User already exists")
 		return
 	}
 
@@ -109,15 +111,6 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	}
 	user.Password = string(hashedPass)
 
-	// Inserting the avatar pic to user's db
-	boyProfile := fmt.Sprintf("https://avatar-placeholder.iran.liara.run/public/boy?%v", user.Username)
-	girlProfile := fmt.Sprintf("https://avatar-placeholder.iran.liara.run/public/girl?%v", user.Username)
-
-	if user.Gender == "Male" {
-		user.ProfilePic = boyProfile
-	} else {
-		user.ProfilePic = girlProfile
-	}
 	user.CreatedAt = time.Now()
 	user.UpdatedAt = primitive.Timestamp{T: uint32(time.Now().Unix())}
 

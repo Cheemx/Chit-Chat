@@ -12,10 +12,7 @@ type User struct {
 	ID           primitive.ObjectID  `bson:"_id,omitempty" json:"_id,omitempty"`
 	FullName     string              `bson:"fullName" json:"fullName" validate:"required"`
 	Email        string              `bson:"email" json:"email" validate:"required"`
-	Username     string              `bson:"userName" json:"userName" validate:"required"`
 	Password     string              `bson:"password" json:"password" validate:"required"`
-	Gender       string              `bson:"gender" json:"gender" validate:"required,oneof=Male Female Other"`
-	ProfilePic   string              `bson:"profilePic" json:"profilePic"`
 	RefreshToken string              `bson:"refreshToken" json:"refreshToken"`
 	CreatedAt    time.Time           `bson:"createdAt" json:"createdAt" validate:"required"`
 	UpdatedAt    primitive.Timestamp `bson:"updatedAt" json:"updatedAt" validate:"required"`

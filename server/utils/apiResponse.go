@@ -1,7 +1,7 @@
 package utils
 
 type ApiResponse struct {
-	StatusCode int         `json:"statusCode"`
+	StatusCode int         `json:"status"`
 	Data       interface{} `json:"data"`
 	Message    string      `json:"message"`
 }

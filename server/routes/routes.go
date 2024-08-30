@@ -10,7 +10,7 @@ import (
 
 func Router() *mux.Router {
 	router := mux.NewRouter()
-	router.Use(middlewares.CorsMiddleware)
+	// http.Handle("/", middlewares.CorsMiddleware(router))
 
 	router.HandleFunc("/", controllers.HomeHandler).Methods("GET")
 	router.HandleFunc("/signup", controllers.Signup).Methods("POST")
