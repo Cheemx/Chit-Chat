@@ -3,6 +3,7 @@ package routes
 import (
 	"chitchat/controllers"
 	"chitchat/middlewares"
+	"chitchat/ws"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -23,6 +24,9 @@ func Router() *mux.Router {
 
 	// User routes
 	router.Handle("/get/users", middlewares.VerifyJWT(http.HandlerFunc(controllers.GetUsers))).Methods("GET")
+
+	// Add Websocket route
+	router.HandleFunc("/ws/{id}", ws.HandleWS)
 
 	return router
 }

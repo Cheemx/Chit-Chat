@@ -3,6 +3,7 @@ package main
 import (
 	"chitchat/db"
 	"chitchat/routes"
+	"chitchat/ws"
 	"fmt"
 	"log"
 	"net/http"
@@ -39,6 +40,8 @@ func main() {
 	})
 
 	handler := c.Handler(r)
+
+	go ws.HandleMessages()
 
 	fmt.Printf("Listening at %v\n", port)
 	log.Fatal(http.ListenAndServe(port, handler))

@@ -9,7 +9,10 @@ function App() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        axios.get('http://localhost:3000')
+        axios.get('http://localhost:3000',{
+            withCredentials: false
+        }
+        )
         .then((res) => {
             console.log("Client and Server Connected!!!")
         })
@@ -18,6 +21,7 @@ function App() {
         })
         .finally(() => setLoading(false))
     })
+
 
     return !loading ? (
         <div className='min-h-screen flex flex-col bg-black bg-opacity-10 backdrop-blur-lg'>

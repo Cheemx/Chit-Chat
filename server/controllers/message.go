@@ -162,7 +162,27 @@ func GetMessage(w http.ResponseWriter, r *http.Request) {
 
 	if findConvoError != nil {
 		if errors.Is(findConvoError, mongo.ErrNoDocuments) {
-			http.Error(w, "No conversation found", http.StatusNotFound)
+			newConvo := model.Conversation{
+				Participant: []primitive.ObjectID{userToChatId, receiver.ID},
+				Message:     []model.Message{},
+				CreatedAt:   time.Now(),
+			}
+
+			_, insertErr := db.ConvoCollection.InsertOne(context.TODO(), newConvo)
+
+			if insertErr != nil {
+				http.Error(w, "Error while creating new conversation: "+insertErr.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			res := utils.ApiResponse{
+				StatusCode: http.StatusOK,
+				Data:       newConvo.Message,
+				Message:    "New conversation created successfully!",
+			}
+
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(res)
 			return
 		}
 		http.Error(w, "Error while retrieving conversation: "+findConvoError.Error(), http.StatusInternalServerError)

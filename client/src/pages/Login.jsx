@@ -26,7 +26,7 @@ function Login() {
             )
     
             if (res.status === 200) {
-                const userData = res.data
+                const userData = res.data.data    
                 if (userData) {
                     dispatch(authLogin(userData))
                     navigate("/")
@@ -78,7 +78,7 @@ function Login() {
                                 required: true
                             })}
                         />
-                        <Button type='submit' className='w-full'>
+                        <Button type='submit' className='w-fit'>
                             Login
                         </Button>
                     </div>
