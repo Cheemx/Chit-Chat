@@ -13,7 +13,7 @@ function Home() {
             </h1>
         </div>
     ) : (
-        <div className='flex sm:h-[450px] md:h-[550px] rounded-lg overflow-hidden bg-black bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-20'>
+        <div className='flex sm:h-[450px] md:h-[550px] rounded-lg overflow-hidden bg-gray-900 bg-clip-padding '>
             <Sidebar />
             <MessageContainer />
         </div>

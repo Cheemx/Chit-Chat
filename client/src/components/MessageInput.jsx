@@ -1,62 +1,39 @@
 import React, { useState } from 'react'
-import {useDispatch, useSelector} from "react-redux"
-import axios from "axios"
-import {setMessages} from "../store/conversationSlice.js"
 
-function MessageInput({socket, wsConnected}) {
+function MessageInput({ sendMessage, wsConnected}) {
     const [message, setMessage] = useState('')
     const [loading, setLoading] = useState(false)
-    const dispatch = useDispatch()
-    const {messages, selectedConversation} = useSelector((state) => state.conversation)
 
-    const sendMessage = async () => {
-        if (!message.trim()) return;
+    const handleSend = () => {
+        if (!message.trim()) return
         setLoading(true)
+        sendMessage(message)
+        setMessage('')
+        setLoading(false)
+    }
 
-        try {
-            const res = await axios.post(
-                `http://localhost:3000/send/${selectedConversation._id}`,
-                {message},
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            )
-    
-            const newMessage = res.data.data
-            console.log(newMessage);            
-            if (!newMessage) {
-                throw new Error("Failed to send message")
-            }
-
-            if (wsConnected && socket) {
-                socket.send(JSON.stringify(newMessage))
-            }
-    
-            dispatch(setMessages([...messages, newMessage]))
-    
-            setMessage('')
-        } catch (error) {
-            console.error(error.message);            
-        } finally {
-            setLoading(false)
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault()
+            handleSend()
         }
     }
+
     return (
-        <div className='flex flex-col items-start p-4 bg-gray-800 text-white w-full'>
-            <textarea
-                className='w-full p-2 bg-gray-900 text-white border border-gray-700 rounded-md'
-                rows={1}
+        <div className='w-full p-4 bg-gray-800 text-white flex items-center gap-3 border-gray-700'>
+            <input 
+                type="text" 
+                className='flex-grow p-3 bg-gray-900 text-white border border-gray-600 rounded-lg focus:outline-none focus:border-cyan-500 focus:ring focus:ring-cyan-500 transition-all duration-200'
                 placeholder='Type your message...'
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                disabled={loading}
+                onKeyDown={handleKeyDown}
+                disabled={loading || !wsConnected}
             />
             <button
-                onClick={sendMessage}
-                className={`mt-2 px-4 py-2 bg-blue-500 text-white rounded-md ${loading ? 'opacity-50' : ''}`}
-                disabled={loading}
+                onClick={handleSend}
+                className={`px-4 py-2 rounded-lg bg-cyan-500 text-white font-semibold shadow-md hover:bg-cyan-600 transition-all duration-200 ${loading || !wsConnected ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={loading || !wsConnected}
             >
                 {loading ? 'Sending...' : 'Send'}
             </button>

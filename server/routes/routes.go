@@ -26,7 +26,7 @@ func Router() *mux.Router {
 	router.Handle("/get/users", middlewares.VerifyJWT(http.HandlerFunc(controllers.GetUsers))).Methods("GET")
 
 	// Add Websocket route
-	router.HandleFunc("/ws/{id}", ws.HandleWS)
+	router.Handle("/ws/{id}", middlewares.VerifyJWT(http.HandlerFunc(ws.HandleWS)))
 
 	return router
 }

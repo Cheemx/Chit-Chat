@@ -28,7 +28,10 @@ function Login() {
             if (res.status === 200) {
                 const userData = res.data.data    
                 if (userData) {
-                    dispatch(authLogin(userData))
+                    dispatch(authLogin({
+                        status: true,
+                        userData
+                    }))
                     navigate("/")
                 }
             } else {

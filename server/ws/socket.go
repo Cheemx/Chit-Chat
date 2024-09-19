@@ -1,110 +1,154 @@
 package ws
 
 import (
-	"chitchat/db"
 	"chitchat/model"
-	"context"
+	"encoding/json"
 	"log"
 	"net/http"
 	"sync"
+	"time"
 
-	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
 )
 
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
-		// origin := r.Header.Get("Origin")
-		return true // change this when the project is deployed
+		origin := r.Header.Get("Origin")
+		return origin == "http://localhost:5173"
 	},
+	EnableCompression: false,
 }
 
-var userSocketMap = make(map[string]*websocket.Conn)
-var broadcast = make(chan model.Message)
+type UserSocket struct {
+	Conn     *websocket.Conn
+	MsgQueue chan model.Message
+}
+
+var userSocketMap = make(map[string]*UserSocket)
 var mutex sync.Mutex
 
 func HandleWS(w http.ResponseWriter, r *http.Request) {
 	// Upgrade initial HTTP connection to WebSocket
 	socket, err := upgrader.Upgrade(w, r, nil)
-
 	if err != nil {
 		log.Println("Error upgrading to WebSocket:", err)
 		return
 	}
-	defer socket.Close()
+	log.Println("Websocket conn upgraded successfully")
 
-	vars := mux.Vars(r)
-	userId := vars["id"]
+	// Ping Pong Handler!
+	pingTicker := time.NewTicker(1 * time.Minute)
+	socket.SetPongHandler(func(appData string) error {
+		log.Println("Pong received")
+		return nil
+	})
 
-	if userId != "" {
-		mutex.Lock()
-		// Registering new user
-		userSocketMap[userId] = socket
-		mutex.Unlock()
-		log.Printf("User connected: %s with socket ID: %s\n", userId, socket.RemoteAddr())
+	go func() {
+		for {
+			<-pingTicker.C
+			if err := socket.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
+				log.Println("Ping failed, closing connection:", err)
+				socket.Close()
+				break
+			}
+		}
+	}()
 
-		broadcastOnlineUsers()
+	// Grab the user from context (Set by verifyJWT middleware)
+	user, ok := r.Context().Value("user").(*model.User)
+	if !ok || user == nil {
+		http.Error(w, "Unauthorized Request", http.StatusUnauthorized)
+		return
 	}
+
+	userId := user.ID.Hex()
+
+	// vars := mux.Vars(r)
+	// receiverId := vars["id"]
+
+	ReadMessages(userId, socket)
+
+	defer func() {
+		pingTicker.Stop()
+		mutex.Lock()
+		delete(userSocketMap, userId)
+		mutex.Unlock()
+		log.Println("WebSocket connection closed.")
+		socket.Close()
+	}()
+}
+
+func HandleMessages(receiverId string, msg model.Message) {
+	// Lock the mutex to ensure safe access to the userSocketMap
+	mutex.Lock()
+	receiver, exists := userSocketMap[receiverId]
+	mutex.Unlock()
+
+	if exists {
+		// Add the message to the user's message queue
+		receiver.MsgQueue <- msg
+		log.Printf("Message queued for user %s\n", receiverId)
+	} else {
+		log.Printf("User %s is not connected. Message will only be saved on DB!\n", receiverId)
+	}
+}
+
+// A separate function to handle sending messages sequentially for each user
+func StartMessageWriter(userId string, socket *websocket.Conn) {
+	msgQueue := make(chan model.Message, 100) // Buffered channel to hold queued messages
+
+	userSocketMap[userId] = &UserSocket{
+		Conn:     socket,
+		MsgQueue: msgQueue,
+	}
+
+	// Goroutine to send messages from the queue
+	go func() {
+		for msg := range msgQueue {
+			writeErr := socket.WriteJSON(msg)
+			if writeErr != nil {
+				log.Printf("Error sending message to user %s: %v\n", userId, writeErr)
+				mutex.Lock()
+				delete(userSocketMap, userId)
+				mutex.Unlock()
+				socket.Close()
+				return
+			}
+			log.Printf("Message sent to User %s\n", userId)
+		}
+	}()
+}
+
+func ReadMessages(userId string, socket *websocket.Conn) {
+	StartMessageWriter(userId, socket)
+
+	defer func() {
+		mutex.Lock()
+		if userSocketMap[userId] != nil {
+			close(userSocketMap[userId].MsgQueue)
+		}
+		delete(userSocketMap, userId)
+		mutex.Unlock()
+		log.Printf("User %s disconnected.\n", userId)
+		socket.Close()
+	}()
 
 	for {
 		var msg model.Message
 		// Read new message as JSON and map it to msg object
-		readErr := socket.ReadJSON(&msg)
+		_, msgBytes, readErr := socket.ReadMessage()
 		if readErr != nil {
-			log.Printf("Error: %v", readErr)
+			log.Printf("Error reading message for user %s: %v", userId, readErr)
 			break
 		}
-		broadcast <- msg
-	}
 
-	mutex.Lock()
-	delete(userSocketMap, userId)
-	mutex.Unlock()
-	broadcastOnlineUsers()
-}
-
-func broadcastOnlineUsers() {
-	mutex.Lock()
-	defer mutex.Unlock()
-
-	onlineUsers := make([]string, 0, len(userSocketMap))
-	for userId := range userSocketMap {
-		onlineUsers = append(onlineUsers, userId)
-	}
-
-	for _, conn := range userSocketMap {
-		err := conn.WriteJSON(onlineUsers)
-		if err != nil {
-			log.Printf("Error sending online users: %v\n", err)
+		if err := json.Unmarshal(msgBytes, &msg); err != nil {
+			log.Printf("Error unmarshalling message for user %s: %v", userId, err)
+			continue
 		}
-	}
-}
+		log.Printf("Message from user %s being inserted to channel: %v\n", msg.SenderID, msg)
 
-func HandleMessages() {
-	for {
-		// grab next message from the broadcast channel
-		msg := <-broadcast
-
-		// Lock the mutex to ensure safe access to the userSocketMap
-		mutex.Lock()
-		receiverSocket, exists := userSocketMap[msg.ReceiverID.Hex()]
-		mutex.Unlock()
-
-		if exists {
-			writeErr := receiverSocket.WriteJSON(msg)
-			if writeErr != nil {
-				log.Printf("Error sending message to user %s: %v\n", msg.ReceiverID, writeErr)
-				receiverSocket.Close()
-				mutex.Lock()
-				delete(userSocketMap, msg.ReceiverID.Hex())
-				mutex.Unlock()
-			}
-		} else {
-			log.Printf("User %s is not connected\n", msg.ReceiverID)
-			_, insertErr := db.MessageCollection.InsertOne(context.TODO(), msg)
-			if insertErr != nil {
-				log.Println("Error saving message:", insertErr)
-			}
-		}
+		// Forward the message to the receiver
+		HandleMessages(msg.ReceiverID.Hex(), msg)
 	}
 }

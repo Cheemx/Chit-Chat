@@ -37,26 +37,29 @@ function Sidebar() {
     }
 
     return (
-        <div className='flex flex-col h-screen min-w-[300px]'>
-            <h2 className='text-center text-xl font-bold leading-tight text-white p-4 border-b border-gray-600'>Chats</h2>
-
+        <div className='flex flex-col h-full min-w-[300px] bg-gray-900 text-white shadow-lg'>
+            <h2 className='text-center text-2xl font-semibold text-cyan-500 p-5 border-b border-gray-700'>
+                Chats
+            </h2>
             <div className='overflow-y-auto'>
                 {loading ? (
-                    <p className='p-4'>Loading...</p>
+                    <p className='p-4 text-center text-gray-400'>Loading Conversations...</p>
                 ) : (
-                    <ul>
+                    <ul className='divide-y divide-gray-700'>
                         {conversations.length > 0 ? (
-                            conversations.map((user) => (
+                            conversations.map((user) =>(
                                 <li
                                     key={user._id}
-                                    className='flex items-start justify-between p-4 border-b border-gray-600 hover:bg-gray-700 cursor-pointer'
+                                    className='flex items-center justify-between p-4 hover:bg-gray-800 cursor-pointer transition-all duration-200 ease-in-out'
                                     onClick={() => handleSelecteConversation(user)}
                                 >
-                                    <p className='font-medium text-gray-200'>{user.fullName}</p>
+                                    <div className='flex items-center gap-3'>
+                                        <p className='font-medium text-gray-200'>{user.fullName}</p>
+                                    </div>
                                 </li>
                             ))
                         ) : (
-                            <li>No Conversations Available</li>
+                            <li className='p-4 text-center text-gray-400'>No Conversations Available</li>
                         )}
                     </ul>
                 )}
