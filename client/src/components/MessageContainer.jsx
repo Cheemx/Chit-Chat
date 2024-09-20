@@ -26,7 +26,7 @@ function MessageContainer() {
             }
 
             // Initialize websocket connection
-            socketRef.current = new WebSocket(`ws://chit-chat-mcvb.onrender.com/ws/${selectedConversation._id}`)
+            socketRef.current = new WebSocket(`wss://chit-chat-mcvb.onrender.com/ws/${selectedConversation._id}`)
             
             // WebSocket conn opened
             socketRef.current.onopen = () => {
