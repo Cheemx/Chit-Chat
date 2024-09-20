@@ -14,7 +14,7 @@ import (
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
 		origin := r.Header.Get("Origin")
-		return origin == "https://chit-chat-green.vercel.app/"
+		return origin == "https://chit-chat-green.vercel.app"
 	},
 	EnableCompression: false,
 }
