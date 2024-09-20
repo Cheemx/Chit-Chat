@@ -25,7 +25,7 @@ function Signup() {
             if (res.status === 200) {
                 const userData = res.data
                 if (userData) {
-                    navigate("https://chit-chat-mcvb.onrender.com/login")
+                    navigate("/login")
                 } else {
                     console.error("userData nahi aa rha bhai")
                 }
