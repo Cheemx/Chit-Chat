@@ -25,7 +25,7 @@ func main() {
 	fmt.Println("Server is getting started ...")
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:5173"},
+		AllowedOrigins:   []string{"http://localhost:5173", "https://chit-chat-green.vercel.app/"},
 		AllowCredentials: true,
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
 		AllowedHeaders:   []string{"X-Requested-With", "Content-Type", "Authorization"},
