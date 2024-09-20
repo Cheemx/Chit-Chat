@@ -5,6 +5,12 @@ import Message from "./Message.jsx"
 function Messages({ messages, loading, receiver }) {
     const lastMessageRef = useRef()
 
+    useEffect(() => {
+        if (lastMessageRef.current) {
+            lastMessageRef.current.scrollIntoView({behavior: "smooth"})
+        }
+    }, [messages])
+
     return (
         <div className='px-4 flex-1 overflow-auto h-max-[400px] overflow-y-auto'>
             {loading && [...Array(3)].map((_, idx) => <MessageSkeleton key={idx} />)}
