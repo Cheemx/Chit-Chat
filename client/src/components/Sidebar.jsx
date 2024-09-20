@@ -10,7 +10,7 @@ function Sidebar() {
     useEffect(() => {
         const fetchConversations = async () => {
             try {
-                const res = await axios.get("http://localhost:3000/get/users")
+                const res = await axios.get("https://chit-chat-mcvb.onrender.com/get/users")
                 dispatch(setConversations({
                     loading: false,
                     conversations: res.data.data

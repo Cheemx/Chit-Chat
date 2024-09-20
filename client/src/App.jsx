@@ -9,7 +9,7 @@ function App() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        axios.get('http://localhost:3000',{
+        axios.get('https://chit-chat-mcvb.onrender.com/',{
             withCredentials: false
         }
         )

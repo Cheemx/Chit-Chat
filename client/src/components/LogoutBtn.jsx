@@ -12,7 +12,7 @@ function LogoutBtn() {
     const logouthandler = async () => {
         try {
             const res = await axios.post(
-                "http://localhost:3000/logout",
+                "https://chit-chat-mcvb.onrender.com/logout",
                 {},
                 {
                     headers: {

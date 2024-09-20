@@ -26,7 +26,7 @@ function MessageContainer() {
             }
 
             // Initialize websocket connection
-            socketRef.current = new WebSocket(`ws://localhost:3000/ws/${selectedConversation._id}`)
+            socketRef.current = new WebSocket(`ws://chit-chat-mcvb.onrender.com/ws/${selectedConversation._id}`)
             
             // WebSocket conn opened
             socketRef.current.onopen = () => {
@@ -66,7 +66,7 @@ function MessageContainer() {
         const getMessages = async () => {
             setLoading(true)
             try {
-                const res = await axios.get(`http://localhost:3000/${selectedConversation._id}`)
+                const res = await axios.get(`https://chit-chat-mcvb.onrender.com/${selectedConversation._id}`)
                 dispatch(setMessages(res.data.data))
                 setLocalMessages(res.data.data)
             } catch (error) {
@@ -87,7 +87,7 @@ function MessageContainer() {
 
         try {
             const res = await axios.post(
-                `http://localhost:3000/send/${selectedConversation._id}`,
+                `https://chit-chat-mcvb.onrender.com/send/${selectedConversation._id}`,
                 { message: messageContent },
                 { headers: { 'Content-Type': 'application/json' } }
             )

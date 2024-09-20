@@ -14,7 +14,7 @@ function Signup() {
     const onSubmit = async (data) => {
         try {
             const res = await axios.post(
-                "http://localhost:3000/signup",
+                "https://chit-chat-mcvb.onrender.com//signup",
                 data,
                 {
                     headers: {
@@ -25,7 +25,7 @@ function Signup() {
             if (res.status === 200) {
                 const userData = res.data
                 if (userData) {
-                    navigate("/login")
+                    navigate("https://chit-chat-mcvb.onrender.com//login")
                 } else {
                     console.error("userData nahi aa rha bhai")
                 }
@@ -47,7 +47,7 @@ function Signup() {
                 <p>
                     Already have an Account?&nbsp;
                     <Link
-                        to='http://localhost:3000/login'
+                        to='/login'
                         className='font-medium text-primary transition-all duration-200 hover:underline'
                     >
                         Sign In
