@@ -1,11 +1,21 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
+function formatTime(dateString) {
+    const date = new Date(dateString)
+    const options = {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true
+    }
+    return date.toLocaleString('en-us', options)
+}
+
 function Message({message, receiver}) {
     const authUser = useSelector((state) => state.auth.userData)
     const fromMe = authUser ? message.senderId === authUser._id : false
 
-    // const formattedTime = create extract Time function from database
+    const formattedTime = formatTime(message.createdAt)
     const chatClassName = fromMe ? "justify-end" : "justify-start"
     const bubbleBgColor = fromMe ? "bg-cyan-500" : "bg-gray-700"
     const bubbleTextColor = fromMe ? "text-white" : "text-gray-200"
@@ -24,8 +34,8 @@ function Message({message, receiver}) {
             {/* Message Bubble */}
             <div className={`max-w-xs mx-2 p-2 rounded-lg shadow-md ${bubbleBgColor} ${bubbleTextColor} flex flex-col gap-1 ${messageAlignment}`}>
                 <p className='text-base leading-tight'>{message.message}</p>
-                <span className='text-ws text-gray-400 self-end'>
-                    {/* {formattedTime} */}
+                <span className='text-ws text-gray-400 self-end italic tracking-wide'>
+                    {formattedTime}
                 </span>
             </div>
 

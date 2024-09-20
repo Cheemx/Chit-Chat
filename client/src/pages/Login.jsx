@@ -16,7 +16,7 @@ function Login() {
     const login = async (data) => {
         try {
             const res = await axios.post(
-                "https://chit-chat-mcvb.onrender.com//login",
+                "https://chit-chat-mcvb.onrender.com/login",
                 data,
                 {
                     headers: {
