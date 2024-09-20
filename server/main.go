@@ -8,16 +8,15 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/joho/godotenv"
 	"github.com/rs/cors"
 )
 
 func init() {
-	er := godotenv.Load()
+	// er := godotenv.Load()
 
-	if er != nil {
-		log.Fatalf("Error in loading env %v", er)
-	}
+	// if er != nil {
+	// 	log.Fatalf("Error in loading env %v", er)
+	// }
 	db.ConnectDB()
 }
 
