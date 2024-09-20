@@ -12,11 +12,6 @@ import (
 )
 
 func init() {
-	// er := godotenv.Load()
-
-	// if er != nil {
-	// 	log.Fatalf("Error in loading env %v", er)
-	// }
 	db.ConnectDB()
 }
 
