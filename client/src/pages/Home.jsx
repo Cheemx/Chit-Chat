@@ -31,9 +31,10 @@ function Home() {
                         <span className='font-semibold'>Responsiveness:</span> While the app looks great on larger screens. there are ongoing improvements for while support.
                     </li>
                     <li>
-                        <span className='font-semibold'>Contact:</span> If you encounter any issues or have suggestions, please reach out at 
+                        <span className='font-semibold'>Contact:</span> If you encounter any issues or have suggestions, please reach out at:
+                        <br /> 
                         <a href="mailto:chinmaymahajan999@gmail.com" className='text-cyan-500 hover:underline'>
-                            <span>chinmaymahajan999@gmail.com</span>
+                            chinmaymahajan999@gmail.com
                         </a>
                     </li>
                 </ul>
