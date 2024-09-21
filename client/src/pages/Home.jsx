@@ -11,9 +11,10 @@ function Home() {
             <h1 className='text-4xl font-bold text-white mb-6'>
                 Welcome to Chitchat
             </h1>
-            <p className='text-gray-300 font-medium text-2xl'>
+            <p className='text-gray-300 font-normal text-2xl text-left justify-start'>
                 Chitchat is a real-time chat application built with cutting-edge technology to provide fast, seamless messaging (ofcourse if you have fast internet connection). Explore the project, and if you just want to test the project feel free to do so with accounts below!
-            </p> 
+            </p>
+            <br /> 
 
             <div className='text-left max-w-2xl mb-8'>
                 <ul className='list-disc text-gray-300 pl-5'>
@@ -32,7 +33,7 @@ function Home() {
                     <li>
                         <span className='font-semibold'>Contact:</span> If you encounter any issues or have suggestions, please reach out at 
                         <a href="mailto:chinmaymahajan999@gmail.com" className='text-cyan-500 hover:underline'>
-                            chinmaymahajan999@gmail.com
+                            <span>chinmaymahajan999@gmail.com</span>
                         </a>
                     </li>
                 </ul>
