@@ -14,7 +14,7 @@ const Input = React.forwardRef(({
                     className='inline-block mb-1 pl-1'
                     htmlFor={id}
                 >
-                    <span className='text-base'>{label}</span>
+                    <span className='text-base text-gray-300'>{label}</span>
                 </label>
             }
             <input
