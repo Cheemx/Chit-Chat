@@ -41,6 +41,19 @@ function Home() {
                             chinmaymahajan999@gmail.com
                         </a>
                     </li>
+                    <li>
+                        <span className='font-semibold'>For Source code</span>
+                        <br />
+                        <a 
+                            href="https://github.com/Cheemx/Chit-Chat" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className='text-cyan-500 hover:underline'>
+                            View the project on GitHub
+                        </a>
+                        <br />
+                        <p>Give it a star ⭐ if you like it!</p>
+                    </li>
                 </ul>
             </div>
 
