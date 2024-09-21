@@ -20,7 +20,7 @@ function Message({message, receiver}) {
     const bubbleBgColor = fromMe ? "bg-cyan-500" : "bg-gray-700"
     const bubbleTextColor = fromMe ? "text-white" : "text-gray-200"
     const messageAlignment = fromMe ? "items-end" : "items-start"
-    const timeTextColor = fromMe ? "text-gray-400" : "text-black"
+    const timeTextColor = fromMe ? "text-black" : "text-gray-400"
 
     return (
         <div className={`flex ${chatClassName} py-2`}>
