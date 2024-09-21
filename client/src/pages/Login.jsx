@@ -64,6 +64,7 @@ function Login() {
                         <Input
                             label = "Email: "
                             placeholder="Enter your email"
+                            className='text-gray-300'
                             type="email"
                             {...register("email", {
                                 required: true,
@@ -77,6 +78,7 @@ function Login() {
                             label="Password: "
                             type="password"
                             placeholder="Enter your password"
+                            className='text-gray-300'
                             {...register("password", {
                                 required: true
                             })}

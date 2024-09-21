@@ -60,6 +60,7 @@ function Signup() {
                         <Input
                             label = "Name: "
                             placeholder = "Enter your Name"
+                            className='text-gray-300'
                             type="text"
                             {...register("fullName",{
                                 required: true
@@ -68,6 +69,7 @@ function Signup() {
                         <Input
                             label = "Email: "
                             placeholder="Enter your email"
+                            className='text-gray-300'
                             type="email"
                             {...register("email", {
                                 required: true,
