@@ -20,6 +20,7 @@ function Message({message, receiver}) {
     const bubbleBgColor = fromMe ? "bg-cyan-500" : "bg-gray-700"
     const bubbleTextColor = fromMe ? "text-white" : "text-gray-200"
     const messageAlignment = fromMe ? "items-end" : "items-start"
+    const timeTextColor = fromMe ? "text-gray-400" : "text-black"
 
     return (
         <div className={`flex ${chatClassName} py-2`}>
@@ -34,7 +35,7 @@ function Message({message, receiver}) {
             {/* Message Bubble */}
             <div className={`max-w-xs mx-2 p-2 rounded-lg shadow-md ${bubbleBgColor} ${bubbleTextColor} flex flex-col gap-1 ${messageAlignment}`}>
                 <p className='text-base leading-tight'>{message.message}</p>
-                <span className='text-ws text-gray-400 self-end italic tracking-wide'>
+                <span className={`text-ws self-end italic tracking-wide ${timeTextColor}`}>
                     {formattedTime}
                 </span>
             </div>
