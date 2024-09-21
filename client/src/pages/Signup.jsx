@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import {Link, useNavigate} from "react-router-dom"
 import axios from "axios"
 import {useForm} from "react-hook-form"
-import {login} from "../store/authSlice.js"
 import Input from "../components/Input.jsx"
 import Button from '../components/Button.jsx'
 
@@ -86,7 +85,7 @@ function Signup() {
                             })}
                         />
                         <Button type='submit' className='w-fit'>
-                            Create Yapper!
+                            Create Account!
                         </Button>
                     </div>
                 </form>         
