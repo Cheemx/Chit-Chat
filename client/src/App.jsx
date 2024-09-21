@@ -24,7 +24,7 @@ function App() {
 
 
     return !loading ? (
-        <div className='min-h-screen flex flex-col bg-black bg-opacity-10 backdrop-blur-lg'>
+        <div className='min-h-screen flex flex-col bg-gray-900 '>
             <Header />
             <Outlet />
             <Footer />  

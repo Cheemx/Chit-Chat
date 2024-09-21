@@ -7,11 +7,11 @@ function Home() {
     const authStatus = useSelector((state) => state.auth.status)
 
     return !authStatus ? (
-        <div className='min-h-screen max-w-full py-8 mt-4 text-center flex flex-col items-center justify-center p-4'>
+        <div className='min-h-screen bg-gray-900 max-w-full py-8 mt-4 text-center flex flex-col items-center justify-center p-4'>
             <h1 className='text-4xl font-bold text-white mb-6'>
                 Welcome to Chitchat
             </h1>
-            <p>
+            <p className='text-gray-300 font-medium text-2xl'>
                 Chitchat is a real-time chat application built with cutting-edge technology to provide fast, seamless messaging (ofcourse if you have fast internet connection). Explore the project, and if you just want to test the project feel free to do so with accounts below!
             </p> 
 
