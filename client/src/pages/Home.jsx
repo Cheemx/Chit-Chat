@@ -33,7 +33,7 @@ function Home() {
                     <li>
                         <span className='font-semibold'>Contact:</span> If you encounter any issues or have suggestions, please reach out at:
                         <br /> 
-                        <a href="mailto:chinmaymahajan999@gmail.com" className='text-cyan-500 hover:underline'>
+                        <a href="chinmaymahajan999@gmail.com" className='text-cyan-500 hover:underline'>
                             chinmaymahajan999@gmail.com
                         </a>
                     </li>
