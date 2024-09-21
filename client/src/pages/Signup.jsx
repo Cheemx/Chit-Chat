@@ -39,12 +39,12 @@ function Signup() {
     
 
     return (
-        <div className='flex items-center justify-center'>
+        <div className='flex items-center justify-center min-h-screen'>
             <div className='mx-auto w-full max-w-lg rounded-xl p-10 border border-blue-800/10 bg-black bg-opacity-40'>
                 <h2 className='mt-2 text-center text-2xl font-bold leading-tight text-white'>
                     Sign Up to Chitchat!                    
                 </h2>
-                <p>
+                <p className='text-gray-300'>
                     Already have an Account?&nbsp;
                     <Link
                         to='/login'

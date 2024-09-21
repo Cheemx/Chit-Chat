@@ -43,12 +43,12 @@ function Login() {
     }
     
     return (
-        <div className='flex items-center justify-center'>
+        <div className='flex items-center justify-center min-h-screen'>
             <div className='mx-auto w-full max-w-lg bg-black bg-opacity-40 rounded-xl p-10 border-blue-800/10'>
                 <h2 className='mt-2 text-center text-2xl font-bold leading-tight text-white'>
                     Login to Chitchat!
                 </h2>
-                <p>
+                <p className='text-gray-300'>
                     Don't have an Account?&nbsp;
                     <Link
                         to="/signup"
