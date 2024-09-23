@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {Outlet} from "react-router-dom"
+import {Toaster} from "react-hot-toast"
 import Header from "./components/Header.jsx"
 import Footer from "./components/Footer.jsx"
 import './App.css'
@@ -25,6 +26,7 @@ function App() {
 
     return !loading ? (
         <div className='min-h-screen flex flex-col bg-gray-900 '>
+            <Toaster />
             <Header />
             <Outlet />
             <Footer />  

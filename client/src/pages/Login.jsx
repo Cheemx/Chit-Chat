@@ -20,7 +20,7 @@ function Login() {
                 data,
                 {
                     headers: {
-                        'Content-Type' : 'appication/json'
+                        'Content-Type' : 'application/json'
                     }
                 }
             )
