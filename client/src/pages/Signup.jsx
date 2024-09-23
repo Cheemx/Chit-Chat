@@ -28,9 +28,11 @@ function Signup() {
                 } else {
                     console.error("No userData returned from backend!")
                 }
-            } else if (res.status === 400) {
+            } 
+            if (res.status === 400) {
                 toast.error("The User already Exists!")
-            } else if (res.status === 500) {
+            }  
+            if (res.status === 500) {
                 toast.error("Internal Server Error! Please try again later")
             }
         } catch (error) {

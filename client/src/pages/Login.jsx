@@ -34,11 +34,13 @@ function Login() {
                     }))
                     navigate("/")
                 }
-            } else if (res.status === 400) {
+            } 
+            if (res.status === 400) {
                 const errorMessage = res.data?.message || "Invalid username or Password"
 
                 toast.error(errorMessage)
-            } else if (res.status === 401) {
+            } 
+            if (res.status === 401) {
                 toast.error("No User Found!")
             }
         } catch (error) {
