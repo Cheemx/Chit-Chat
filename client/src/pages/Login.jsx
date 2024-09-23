@@ -3,15 +3,15 @@ import {Link, useNavigate} from "react-router-dom"
 import {useForm} from "react-hook-form"
 import axios from "axios"
 import {useDispatch} from "react-redux"
+import toast from "react-hot-toast"
 import {login as authLogin} from "../store/authSlice.js"
 import Button from "../components/Button.jsx"
 import Input from "../components/Input.jsx"
 
 function Login() {
     const navigate = useNavigate()
-    const [error, setError] = useState("")
     const dispatch = useDispatch()
-    const {register, handleSubmit} = useForm()
+    const {register, handleSubmit, formState: { errors }} = useForm()
 
     const login = async (data) => {
         try {
@@ -34,11 +34,15 @@ function Login() {
                     }))
                     navigate("/")
                 }
-            } else {
-                console.error("Login Failed")
+            } else if (res.status === 400) {
+                const errorMessage = res.data?.message || "Invalid username or Password"
+
+                toast.error(errorMessage)
+            } else if (res.status === 401) {
+                toast.error("No User Found!")
             }
         } catch (error) {
-            setError(error.message)
+            toast.error(error.response?.data?.message || error.message)
         }
     }
     
@@ -57,7 +61,6 @@ function Login() {
                         Sign Up
                     </Link>
                 </p>
-                {error && <p className='text-red-600 mt-8 text-center'>{error}</p>}
 
                 <form onSubmit={handleSubmit(login)}>
                     <div className='space-y-5'>
@@ -66,21 +69,25 @@ function Login() {
                             placeholder="Enter your email"
                             type="email"
                             {...register("email", {
-                                required: true,
-                                validate: {
-                                    matchPatern: (value) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                                    "Email address must be a valid address",
+                                required: "Email is required!",
+                                pattern: {
+                                    value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                                    message: "Email address must be a valid address"
                                 }
                             })}
                         />
+                        {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+
                         <Input
                             label="Password: "
                             type="password"
                             placeholder="Enter your password"
                             {...register("password", {
-                                required: true
+                                required: "Password is required"
                             })}
                         />
+                        {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+
                         <Button type='submit' className='w-fit'>
                             Login
                         </Button>

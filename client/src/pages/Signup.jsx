@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import {Link, useNavigate} from "react-router-dom"
 import axios from "axios"
 import {useForm} from "react-hook-form"
+import toast from "react-hot-toast"
 import Input from "../components/Input.jsx"
 import Button from '../components/Button.jsx'
 
 function Signup() {
     const navigate = useNavigate()
-    const [error, setError] = useState("")
-    const {register, handleSubmit} = useForm()
+    const {register, handleSubmit, formState: { errors }} = useForm()
 
     const onSubmit = async (data) => {
         try {
@@ -26,13 +26,21 @@ function Signup() {
                 if (userData) {
                     navigate("/login")
                 } else {
-                    console.error("userData nahi aa rha bhai")
+                    console.error("No userData returned from backend!")
                 }
-            } else {
-                console.error("Signup Failed")
+            } else if (res.status === 400) {
+                const errorMessage = res.data?.message || "Something went wrong";
+                
+                if (errorMessage === "The User already exists") {
+                    toast.error("The User already exists!")
+                } else if (!data) {
+                    toast.error("Please fill in all fields!")
+                }
+            } else if (res.status === 500) {
+                toast.error("Internal Server Error! Please try again later")
             }
         } catch (error) {
-            setError(error.res?.data?.message || "Erm! what an ERROR!")
+            toast.error(error.response?.data?.message || error.message)
         }
     }
     
@@ -51,8 +59,7 @@ function Signup() {
                     >
                         Sign In
                     </Link>
-                </p>  
-                {error && <p className='text-red-600 mt-8 text-center'>{error}</p>}    
+                </p>    
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className='space-y-5'>
@@ -61,29 +68,35 @@ function Signup() {
                             placeholder = "Enter your Name"
                             type="text"
                             {...register("fullName",{
-                                required: true
+                                required: "Name is required"
                             })}
                         />
+                        {errors.fullName && <p className="text-red-500">{errors.fullName.message}</p>}
+
                         <Input
                             label = "Email: "
                             placeholder="Enter your email"
                             type="email"
                             {...register("email", {
-                                required: true,
-                                validate: {
-                                    matchPatern: (value) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                                    "Email address must be a valid address",
+                                required: "Email is required",
+                                pattern: {
+                                    value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                                    message: "Email address must be a valid address"
                                 }
                             })}
                         />
+                        {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+
                         <Input
                             label="Password: "
                             type="password"
                             placeholder="Enter your password"
                             {...register("password", {
-                                required: true
+                                required: "Password is required"
                             })}
                         />
+                        {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+                        
                         <Button type='submit' className='w-fit'>
                             Create Account!
                         </Button>
