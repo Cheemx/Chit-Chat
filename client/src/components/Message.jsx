@@ -43,7 +43,6 @@ function Message({message, receiver}) {
                     <>
                         {message.fileType.startsWith("image") && (
                             <div className="relative">
-                                {/* Click to open in new tab */}
                                 <img 
                                     src={message.fileUrl} 
                                     alt="Sent image"
@@ -51,35 +50,17 @@ function Message({message, receiver}) {
                                     loading="lazy"
                                     onClick={() => window.open(message.fileUrl, "_blank")}
                                 />
-                                {/* Download link */}
-                                <a 
-                                    href={message.fileUrl} 
-                                    download 
-                                    className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-lg"
-                                >
-                                    <svg 
-                                        xmlns="http://www.w3.org/2000/svg" 
-                                        className="h-5 w-5 text-black" 
-                                        viewBox="0 0 24 24" 
-                                        fill="currentColor"
-                                    >
-                                        <path d="M12 16l4-5h-3V4h-2v7H8zM5 18h14v2H5z"/>
-                                    </svg>
-                                </a>
                             </div>
                         )}
                         {message.fileType.startsWith("video") && (
                             <div className="relative cursor-pointer">
-                                {/* Video element with click to download */}
-                                <a href={message.fileUrl} download>
-                                    <video 
-                                        src={message.fileUrl}
-                                        controls
-                                        className="rounded-lg max-h-60 object-cover"
-                                        preload="metadata"
-                                        muted
-                                    />
-                                </a>
+                                <video 
+                                    src={message.fileUrl}
+                                    controls
+                                    className="rounded-lg max-h-60 object-cover"
+                                    preload="metadata"
+                                    muted
+                                />
 
                                 {/* Play icon overlay to open video in a new tab */}
                                 <div
