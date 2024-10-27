@@ -75,7 +75,7 @@ function Message({message, receiver}) {
                                     <video 
                                         src={message.fileUrl}
                                         controls
-                                        className="rounded-lg max-h-60 object-cover opacity-50"
+                                        className="rounded-lg max-h-60 object-cover"
                                         preload="metadata"
                                         muted
                                     />
