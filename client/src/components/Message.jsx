@@ -42,20 +42,41 @@ function Message({message, receiver}) {
                 {message.type === "file" && message.fileType && (
                     <>
                         {message.fileType.startsWith("image") && (
-                            <img 
-                                src={message.fileUrl} 
-                                alt="Sent image"
-                                className='rounded-lg max-h-60 object-cover' 
-                                loading='lazy'
-                            />
+                            <a href={message.fileUrl} download>
+                                <img 
+                                    src={message.fileUrl} 
+                                    alt="Sent image"
+                                    className='rounded-lg max-h-60 object-cover cursor-pointer' 
+                                    loading='lazy'
+                                />
+                            </a>
                         )}
                         {message.fileType.startsWith("video") && (
-                            <video 
-                                src={message.fileUrl}
-                                controls
-                                className='rounded-lg max-h-60 object-cover'
-                                preload='metadata'
-                            />
+                            <div className='relative cursor-pointer'>
+                                <a href={message.fileUrl} download>
+                                    <video 
+                                        src={message.fileUrl}
+                                        controls
+                                        className='rounded-lg max-h-60 object-cover opacity-50'
+                                        preload='metadata'
+                                        muted
+                                    />
+                                </a>
+
+                                <div
+                                    className='absolute inset-0 flex items-center justify-center'
+                                    onClick={() => window.open(message.fileUrl, "_blank")}
+                                >
+                                    <svg 
+                                        xmlns="http://www.w3.org/2000/svg" 
+                                        className="h-12 w-12 text-white opacity-90" 
+                                        viewBox="0 0 24 24" 
+                                        fill="currentColor"
+                                    >
+                                    <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            </div>
                         )}
                     </>
                 )}
