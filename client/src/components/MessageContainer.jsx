@@ -151,8 +151,12 @@ function MessageContainer() {
             ) : (
                 <div className='flex-1 flex flex-col h-full'>
                     <div className='px-6 py-4 bg-gray-800 flex items-center space-x-4 shadow-lg'>
-                        <div className='relative w-12 h-12 rounded-full bg-gray-500 flex items-center justify-center'>
+                        <div className='relative w-10 h-10 rounded-full bg-gray-500 flex items-center justify-center'>
                             <span className='text-white text-lg font-semibold'>{selectedConversation.fullName.charAt(0).toUpperCase()}</span>
+
+                            {selectedConversation.refreshToken && (
+                                <span className='absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-500'></span>
+                            )}
                         </div>
                         <h2 className='text-lg md:text-xl font-bold text-cyan-400'>
                             {selectedConversation.fullName}

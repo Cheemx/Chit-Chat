@@ -35,7 +35,7 @@ function Sidebar() {
     const handleSelecteConversation = (conversation) => {
         dispatch(setSelectedConversation(conversation))
     }
-
+    
     return (
         <div className='flex flex-col h-full min-w-[300px] bg-gray-900 text-white shadow-lg'>
             <h2 className='text-center text-2xl font-semibold text-cyan-500 p-5 border-b border-gray-700'>
@@ -54,6 +54,13 @@ function Sidebar() {
                                     onClick={() => handleSelecteConversation(user)}
                                 >
                                     <div className='flex items-center gap-3'>
+                                        <div className='relative w-10 h-10 rounded-full bg-gray-500 flex items-center justify-center'>
+                                            <span className='text-white text-lg font-semibold'>{user.fullName.charAt(0).toUpperCase()}</span>
+
+                                            {user.refreshToken && (
+                                                <span className='absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-500'></span>
+                                            )}
+                                        </div>
                                         <p className='font-medium text-gray-200'>{user.fullName}</p>
                                     </div>
                                 </li>
