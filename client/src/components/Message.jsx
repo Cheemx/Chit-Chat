@@ -34,10 +34,36 @@ function Message({message, receiver}) {
 
             {/* Message Bubble */}
             <div className={`max-w-xs mx-2 p-2 rounded-lg shadow-md ${bubbleBgColor} ${bubbleTextColor} flex flex-col gap-1 ${messageAlignment}`}>
-                <p className='text-base leading-tight'>{message.message}</p>
+
+                {message.type === "text" && (
+                    <p className='text-base leading-tight'>{message.message}</p>
+                )}
+
+                {message.type === "file" && message.fileType && (
+                    <>
+                        {message.fileType.startsWith("image") && (
+                            <img 
+                                src={message.fileUrl} 
+                                alt="Sent image"
+                                className='rounded-lg max-h-60 object-cover' 
+                                loading='lazy'
+                            />
+                        )}
+                        {message.fileType.startsWith("video") && (
+                            <video 
+                                src={message.fileUrl}
+                                controls
+                                className='rounded-lg max-h-60 object-cover'
+                                preload='metadata'
+                            />
+                        )}
+                    </>
+                )}
+
                 <span className={`text-ws self-end italic tracking-wide ${timeTextColor}`}>
                     {formattedTime}
                 </span>
+
             </div>
 
             {/* For outgoing message, avatar can be skipped */}
