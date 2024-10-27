@@ -5,6 +5,8 @@ import {setMessages, setSelectedConversation} from "../store/conversationSlice.j
 import MessageInput from "./MessageInput.jsx"
 import Messages from "./Messages.jsx"
 import axios from 'axios'
+import { storage } from '../config/firebase.js'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 function MessageContainer() {
     const dispatch = useDispatch()
@@ -81,14 +83,44 @@ function MessageContainer() {
         }
     }, [selectedConversation?._id, dispatch])
 
+    // Firebase storage upload logic
+    const handleFileUpload = async (file) => {
+        try {
+            const fileRef = ref(storage, `uploads/${file.name}`)
+            await uploadBytes(fileRef, file)
+            const downloadURL = await getDownloadURL(fileRef)
+            console.log("File uploaded successfully:", downloadURL)            
+            return downloadURL
+        } catch (error) {
+            console.error("File upload failed:", error)
+            throw error            
+        }
+    }
+
     // Send new message logic
-    const sendMessage = async (messageContent) => {
-        if (!messageContent.trim()) return;
+    const sendMessage = async (messageContent, file = null) => {
+        if (!messageContent.trim() && !file) return;
+        let fileURL = null
+        let fileType = null
 
         try {
+            if(file) {
+                fileURL = await handleFileUpload(file)
+                fileType = file.type.split('/')[0]
+                console.log("File details - URL:", fileURL, "Type:", fileType)                
+            }
+
+            messageContent = {
+                message: messageContent,
+                type: file ? "file" : "text",
+                fileUrl: fileURL,
+                fileType: fileType
+            }
+            console.log("Message being sent from client:",messageContent);            
+
             const res = await axios.post(
                 `https://chit-chat-mcvb.onrender.com/send/${selectedConversation._id}`,
-                { message: messageContent },
+                messageContent,
                 { headers: { 'Content-Type': 'application/json' } }
             )
 
@@ -118,7 +150,10 @@ function MessageContainer() {
                 <NoChatSelected />
             ) : (
                 <div className='flex-1 flex flex-col h-full'>
-                    <div className='px-6 py-4 bg-gray-800 flex items-center justify-between'>
+                    <div className='px-6 py-4 bg-gray-800 flex items-center space-x-4 shadow-lg'>
+                        <div className='relative w-12 h-12 rounded-full bg-gray-500 flex items-center justify-center'>
+                            <span className='text-white text-lg font-semibold'>{selectedConversation.fullName.charAt(0).toUpperCase()}</span>
+                        </div>
                         <h2 className='text-lg md:text-xl font-bold text-cyan-400'>
                             {selectedConversation.fullName}
                         </h2>
