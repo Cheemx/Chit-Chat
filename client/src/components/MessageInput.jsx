@@ -33,7 +33,7 @@ function MessageInput({ sendMessage, wsConnected}) {
         <div className='w-full p-4 bg-gray-800 text-white flex items-center gap-3 border-gray-700'>
             <button
                 onClick={() => fileInputRef.current.click()}
-                className='p-2 rounded-full bg-gray-700 text-white hover:bg-cyan-500 focus:outline-none transition-all duration-200 shadow-md'
+                className={`p-2 rounded-full bg-gray-700 text-white hover:bg-cyan-500 focus:outline-none transition-all duration-200 shadow-md  ${loading || !wsConnected ? 'opacity-50 cursor-not-allowed' : ''}`}
                 title='Attach File'
             >
                 <AiOutlinePaperClip  />
